@@ -1,0 +1,38 @@
+{
+  "name": "assignment-3",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "author": "omar",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "ts-node-dev --env-file=.env src/server.ts",
+    "start": "node --env-file=.env dist/server.js",
+    "build": "tsc",
+    "lint": "eslint src",
+    "format": "prettier . --write",
+    "postinstall": "husky"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.4.0",
+    "@types/cors": "^2.8.17",
+    "@types/eslint": "^8.56.10",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/express": "^4.17.21",
+    "eslint": "9.x",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.4.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.6",
+    "prettier": "3.3.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.13.0"
+  }
+}

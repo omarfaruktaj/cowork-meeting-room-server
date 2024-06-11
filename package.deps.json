@@ -1,0 +1,17 @@
+[
+  "cors",
+  "express",
+  "mongoose",
+  "zod",
+  "@eslint/js",
+  "@types/cors",
+  "@types/eslint",
+  "@types/eslint-config-prettier",
+  "@types/express",
+  "eslint",
+  "eslint-config-prettier",
+  "globals",
+  "prettier",
+  "typescript",
+  "typescript-eslint"
+]
