@@ -3,10 +3,14 @@ import {
   createRoomController,
   getARoomController,
   getAllRoomController,
+  updateRoomController,
 } from "./roomController";
 import authorizeWithRoles from "../../middlewares/authorizeWithRoles";
 import { USER_ROLE } from "../user/userConstant";
-import { roomValidationSchema } from "./roomValidation";
+import {
+  roomValidationSchema,
+  updateRoomValidationSchema,
+} from "./roomValidation";
 import validateRequest from "../../middlewares/validateRequest";
 import validateMongoDBId from "../../middlewares/validateMongoId";
 
@@ -21,6 +25,14 @@ router
   )
   .get(getAllRoomController);
 
-router.route("/rooms/:id").get(validateMongoDBId("id"), getARoomController);
+router
+  .route("/rooms/:id")
+  .get(validateMongoDBId("id"), getARoomController)
+  .put(
+    authorizeWithRoles(USER_ROLE.admin),
+    validateMongoDBId("id"),
+    validateRequest(updateRoomValidationSchema),
+    updateRoomController,
+  );
 
 export default router;

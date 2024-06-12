@@ -3,6 +3,7 @@ import {
   createRoomService,
   getARoomService,
   getAllRoomService,
+  updateRoomService,
 } from "./roomService";
 import httpStatus from "http-status";
 import APIResponse from "../../utils/APIresponse";
@@ -19,6 +20,17 @@ export const createRoomController: RequestHandler = async (req, res) => {
         "Room added successfully",
         room,
       ),
+    );
+};
+
+export const updateRoomController: RequestHandler = async (req, res) => {
+  const roomId = req.params.id;
+  const room = await updateRoomService(roomId, req.body);
+
+  res
+    .status(httpStatus.CREATED)
+    .json(
+      new APIResponse(true, httpStatus.OK, "Room updated successfully", room),
     );
 };
 export const getARoomController: RequestHandler = async (req, res) => {

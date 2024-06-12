@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import AppError from "../../utils/app-error";
 import Room from "./roomModel";
-import { TRoom } from "./roomValidation";
+import { TRoom, TUpdateRoom } from "./roomValidation";
 
 export const createRoomService = async (data: TRoom) => {
   const existedRoom = await Room.findOne({ roomNo: data.roomNo });
@@ -16,9 +16,23 @@ export const createRoomService = async (data: TRoom) => {
   return newRoom;
 };
 
+export const updateRoomService = async (roomId: string, data: TUpdateRoom) => {
+  const room = await Room.findById(roomId);
+
+  if (!room) throw new AppError("No room found", httpStatus.NOT_FOUND);
+
+  const updatedRoom = await Room.findByIdAndUpdate(room.id, data, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedRoom;
+};
+
 export const getARoomService = (roomId: string) => {
   return Room.findById(roomId);
 };
+
 export const getAllRoomService = () => {
   return Room.find({});
 };
