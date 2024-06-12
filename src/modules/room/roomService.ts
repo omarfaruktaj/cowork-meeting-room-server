@@ -19,3 +19,6 @@ export const createRoomService = async (data: TRoom) => {
 export const getARoomService = (roomId: string) => {
   return Room.findById(roomId);
 };
+export const getAllRoomService = () => {
+  return Room.find({});
+};
