@@ -1,8 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 import { TUser } from "./userValidation";
 import isEmail from "validator/lib/isEmail";
+import { UserModel } from "./userInterface";
+import bcrypt from "bcrypt";
+import makeFieldsPrivatePlugin from "../../utils/makeFieldsPrivate";
 
-const userSchema = new Schema<TUser>({
+const userSchema = new Schema<TUser, UserModel>({
   name: {
     type: String,
     required: [true, "Please tell us your name"],
@@ -34,6 +37,7 @@ const userSchema = new Schema<TUser>({
     required: [true, "Please enter a password"],
     minLength: [6, "Password must be at least 6 characters long"],
     maxLength: [50, "Password can't be more then 50 characters long"],
+    select: false,
   },
   address: {
     type: String,
@@ -45,6 +49,23 @@ const userSchema = new Schema<TUser>({
   },
 });
 
-const User = mongoose.model("User", userSchema);
+userSchema.plugin(makeFieldsPrivatePlugin, ["password"]);
+
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  // Hash the password
+  this.password = await bcrypt.hash(this.password, 12);
+  next();
+});
+
+userSchema.statics.correctPassword = async function (
+  candidatePassword,
+  userPassword,
+) {
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
+
+const User = mongoose.model<TUser, UserModel>("User", userSchema);
 
 export default User;

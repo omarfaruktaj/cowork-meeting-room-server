@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const userRoleEnum = z.enum(["user", "admin"]).default("user");
 
-const userValidationSchema = z.object({
+export const userValidationSchema = z.object({
   name: z
     .string({
       required_error: "Name is required",
@@ -32,6 +32,21 @@ const userValidationSchema = z.object({
   role: userRoleEnum,
 });
 
-export type TUser = z.infer<typeof userValidationSchema>;
+export const loginValidationSchema = z.object({
+  email: z
+    .string({
+      required_error: "Email is required",
+    })
+    .email({ message: "Invalid email address" }),
+  password: z
+    .string({
+      required_error: "password is required",
+    })
+    .min(6, { message: "Password must be at least 6 characters long" })
+    .max(50, {
+      message: "Password can't be more then 50 characters long",
+    }),
+});
 
-export default userValidationSchema;
+export type TUser = z.infer<typeof userValidationSchema>;
+export type TLoginSchema = z.infer<typeof loginValidationSchema>;

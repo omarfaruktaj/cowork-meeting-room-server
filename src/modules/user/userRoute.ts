@@ -1,10 +1,11 @@
 import express from "express";
-import { signupController } from "./userController";
+import { loginController, signupController } from "./userController";
 import validateRequest from "../../middlewares/validateRequest";
-import userValidationSchema from "./userValidation";
+import { userValidationSchema, loginValidationSchema } from "./userValidation";
 
 const router = express.Router();
 
 router.post("/signup", validateRequest(userValidationSchema), signupController);
+router.post("/login", validateRequest(loginValidationSchema), loginController);
 
 export default router;
