@@ -1,8 +1,8 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import middlewares from "./middlewares";
 import routes from "./routes";
-import AppError from "../utils/app-error";
 import globalErrorHandler from "./errors";
+import httpStatus from "http-status";
 
 const app = express();
 
@@ -29,8 +29,16 @@ app.get("/", (_req: Request, res: Response) => {
   });
 });
 
-app.all("*", (req: Request, res: Response, next: NextFunction) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server.`, 404));
+app.all("*", (req: Request, res: Response) => {
+  //? My preference
+  // next(new AppError(`Can't find ${req.originalUrl} on this server.`, 404));
+
+  //* Assignment requirement
+  res.status(httpStatus.NOT_FOUND).json({
+    success: true,
+    statusCode: 404,
+    message: "Not Found",
+  });
 });
 
 app.use(globalErrorHandler);

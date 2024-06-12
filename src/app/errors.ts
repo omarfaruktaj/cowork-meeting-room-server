@@ -22,14 +22,24 @@ const handleProductionError = (err: AppError, _req: Request, res: Response) => {
   //? trusted error send error message
   if (err.isOperational) {
     res.status(err.statusCode).json({
-      status: err.status,
+      //? My preference
+      /**
+       * status: err.status,
+       * message: err.message,
+       * errorMessages: err.errorMessages,
+       */
+
+      //* Assignment requirement
+      success: false,
       message: err.message,
+      errorMessages: err.errorMessages,
+      stack: err.stack,
     });
   }
 
   //! not trusted don't shear sensitive message
   res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-    status: "error",
+    success: false,
     message: "Something went very wrong!",
   });
 };

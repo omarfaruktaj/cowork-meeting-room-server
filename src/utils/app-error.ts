@@ -2,16 +2,16 @@ class AppError extends Error {
   public readonly status: string;
   public readonly statusCode: number;
   public readonly isOperational: boolean;
-  public readonly errors?: [];
+  public readonly errorMessages?: [];
 
-  constructor(message: string, statusCode: number, errors?: []) {
+  constructor(message: string, statusCode: number, errorMessages?: []) {
     super(message);
 
     Object.setPrototypeOf(this, new.target.prototype);
 
     this.statusCode = statusCode;
     this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
-    this.errors = errors;
+    this.errorMessages = errorMessages;
     this.isOperational = true;
 
     Error.captureStackTrace(this);
