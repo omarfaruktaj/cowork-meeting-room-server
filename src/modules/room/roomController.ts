@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { createRoomService } from "./roomService";
+import { createRoomService, getARoomService } from "./roomService";
 import httpStatus from "http-status";
 import APIResponse from "../../utils/APIresponse";
 
@@ -15,5 +15,22 @@ export const createRoomController: RequestHandler = async (req, res) => {
         "Room added successfully",
         room,
       ),
+    );
+};
+export const getARoomController: RequestHandler = async (req, res) => {
+  const id = req.params.id;
+
+  const room = await getARoomService(id);
+
+  if (!room) {
+    res
+      .status(httpStatus.NOT_FOUND)
+      .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+  }
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(true, httpStatus.OK, "oom retrieved successfully", room),
     );
 };
