@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import {
   createRoomService,
+  deleteRoomService,
   getARoomService,
   getAllRoomService,
   updateRoomService,
@@ -68,5 +69,16 @@ export const getAllRoomController: RequestHandler = async (req, res) => {
         "Rooms retrieved successfully",
         rooms,
       ),
+    );
+};
+export const deleteRoomController: RequestHandler = async (req, res) => {
+  const roomId = req.params.id;
+
+  const room = await deleteRoomService(roomId);
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(true, httpStatus.OK, "Room deleted successfully", room),
     );
 };

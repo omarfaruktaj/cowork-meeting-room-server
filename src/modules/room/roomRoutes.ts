@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createRoomController,
+  deleteRoomController,
   getARoomController,
   getAllRoomController,
   updateRoomController,
@@ -33,6 +34,12 @@ router
     validateMongoDBId("id"),
     validateRequest(updateRoomValidationSchema),
     updateRoomController,
+  )
+  .delete(
+    authorizeWithRoles(USER_ROLE.admin),
+    validateMongoDBId("id"),
+    validateRequest(updateRoomValidationSchema),
+    deleteRoomController,
   );
 
 export default router;

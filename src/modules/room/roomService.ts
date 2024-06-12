@@ -36,3 +36,16 @@ export const getARoomService = (roomId: string) => {
 export const getAllRoomService = () => {
   return Room.find({});
 };
+
+export const deleteRoomService = async (roomId: string) => {
+  const room = await Room.findById(roomId);
+
+  if (!room) throw new AppError("No room found", httpStatus.NOT_FOUND);
+  const deletedRoom = await Room.findByIdAndUpdate(
+    roomId,
+    { isDeleted: true },
+    { new: true },
+  );
+
+  return deletedRoom;
+};
