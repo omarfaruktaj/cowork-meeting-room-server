@@ -1,8 +1,9 @@
 import express, { Request, Response } from "express";
+import httpStatus from "http-status";
+import "express-async-errors";
 import middlewares from "./middlewares";
 import routes from "./routes";
 import globalErrorHandler from "./errors";
-import httpStatus from "http-status";
 
 const app = express();
 
@@ -10,7 +11,7 @@ const app = express();
 app.use(middlewares);
 
 // routes
-app.use(routes);
+app.use("/api", routes);
 
 // check health
 app.get("/health", (_req: Request, res: Response) => {

@@ -25,7 +25,7 @@ const userSchema = new Schema<TUser>({
     required: [true, "Please enter your phone"],
     trim: true,
     validate: {
-      validator: (value: string) => /^\+(?:[0-9] ?){6,14}[0-9]$/.test(value),
+      validator: (value: string) => /^\+?[0-9][0-9- ]{6,14}[0-9]$/.test(value),
       message: "Invalid phone number",
     },
   },
