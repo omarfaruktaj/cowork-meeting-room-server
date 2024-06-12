@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 interface Payload {
-  id: string;
+  userId: string;
   role: string;
 }
 

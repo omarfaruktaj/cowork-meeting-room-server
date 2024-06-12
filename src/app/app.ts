@@ -4,6 +4,7 @@ import "express-async-errors";
 import middlewares from "./middlewares";
 import routes from "./routes";
 import globalErrorHandler from "./errors";
+import "../interfaces";
 
 const app = express();
 

@@ -24,7 +24,7 @@ export const loginController: RequestHandler = async (req, res) => {
   const user = await loginService(req.body);
 
   const token = generateJWT(
-    { id: String(user._id), role: user.role },
+    { userId: String(user._id), role: user.role },
     envConfig.get("ACCESS_TOKEN_SECRET"),
     envConfig.get("ACCESS_TOKEN_EXPIRE_IN"),
   );
