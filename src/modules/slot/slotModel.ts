@@ -1,9 +1,9 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { TSlot } from "./slotValidation";
 
 const slotSchema = new Schema<TSlot>({
   room: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Room",
     required: [true, "Room is required"],
   },

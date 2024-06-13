@@ -18,7 +18,7 @@ import validateMongoDBId from "../../middlewares/validateMongoId";
 const router = express.Router();
 
 router
-  .route("/rooms")
+  .route("/")
   .post(
     authorizeWithRoles(USER_ROLE.admin),
     validateRequest(roomValidationSchema),
@@ -27,7 +27,7 @@ router
   .get(getAllRoomController);
 
 router
-  .route("/rooms/:id")
+  .route("/:id")
   .get(validateMongoDBId("id"), getARoomController)
   .put(
     authorizeWithRoles(USER_ROLE.admin),
