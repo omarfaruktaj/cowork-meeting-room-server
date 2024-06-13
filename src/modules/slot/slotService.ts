@@ -1,8 +1,9 @@
 import httpStatus from "http-status";
 import AppError from "../../utils/app-error";
 import { getARoomService } from "../room/roomService";
-import { TSlot } from "./slotValidation";
+import { TSlot, TSlotQueryParams } from "./slotValidation";
 import Slot from "./slotModel";
+import { Types } from "mongoose";
 
 function getTimeInMinutes(timeString: string) {
   const [hours, minutes] = timeString.split(":").map(Number);
@@ -19,7 +20,8 @@ export const createSlotService = async (data: TSlot) => {
 
   const room = await getARoomService(roomId);
 
-  if (!room) throw new AppError("No room found.", httpStatus.NOT_FOUND);
+  if (!room || room.isDeleted)
+    throw new AppError("No room found.", httpStatus.NOT_FOUND);
 
   const slotDuration = 60;
 
@@ -43,4 +45,26 @@ export const createSlotService = async (data: TSlot) => {
   const newSlots = await Slot.insertMany(slots);
 
   return newSlots;
+};
+
+interface QueryInterface {
+  isBooked: boolean;
+  date?: string;
+  room?: Types.ObjectId;
+}
+
+export const GetAvailableSlotService = async (params: TSlotQueryParams) => {
+  const query: QueryInterface = {
+    isBooked: false,
+  };
+
+  if (params.date) {
+    query.date = params.date;
+  }
+  if (params.roomId) {
+    query.room = params.roomId;
+  }
+
+  const slots = await Slot.find(query).populate("room");
+  return slots;
 };

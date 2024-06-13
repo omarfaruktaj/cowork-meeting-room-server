@@ -32,4 +32,10 @@ export const validateSlotTimes = (startTime: string, endTime: string) => {
   return end > start;
 };
 
+export const validateSlotQueryParams = z.object({
+  date: dateSchema.optional(),
+  roomId: objectIdSchema.optional(),
+});
+
 export type TSlot = z.infer<typeof slotValidationSchema>;
+export type TSlotQueryParams = z.infer<typeof validateSlotQueryParams>;
