@@ -25,8 +25,6 @@ export const createBookingService = async (data: TBooking) => {
     isBooked: { $ne: true },
   });
 
-  console.log(isAvailableSlots);
-
   if (isAvailableSlots.length !== slots.length) {
     throw new AppError(
       "Some slots are not available at this time.",
@@ -79,6 +77,11 @@ export const updateBookingService = async (
   id: string,
   data: TUpdateBooking,
 ) => {
+  const isBookingExist = await Booking.findById(id);
+
+  if (!isBookingExist)
+    throw new AppError("No booking found", httpStatus.NOT_FOUND);
+
   const booking = await Booking.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,
@@ -88,6 +91,11 @@ export const updateBookingService = async (
 };
 
 export const deleteBookingService = async (id: string) => {
+  const isBookingExist = await Booking.findById(id);
+
+  if (!isBookingExist)
+    throw new AppError("No booking found", httpStatus.NOT_FOUND);
+
   const booking = await Booking.findByIdAndUpdate(
     id,
     { isDeleted: true },
