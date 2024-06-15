@@ -39,6 +39,16 @@ const bookingSchema = new Schema({
   },
 });
 
+bookingSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+bookingSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
 const Booking = model<TBooking>("Booking", bookingSchema);
 
 export default Booking;

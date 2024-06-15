@@ -32,6 +32,29 @@ export const createSlotService = async (data: TSlot) => {
 
   const numberOfSlots = Math.floor(totalDuration / slotDuration);
 
+  const existingSlots = await Slot.find({
+    room: data.room,
+    date: data.date,
+  });
+
+  // Check for overlaps with existing slots
+  for (const existingSlot of existingSlots) {
+    const existingStartTimeInMinute = getTimeInMinutes(existingSlot.startTime);
+    const existingEndTimeInMinute = getTimeInMinutes(existingSlot.endTime);
+
+    const isOverlap = !(
+      existingEndTimeInMinute <= startTimeInMinute ||
+      existingStartTimeInMinute >= endTimeInMinute
+    );
+
+    if (isOverlap) {
+      throw new AppError(
+        "Slot already exists in the given time range.",
+        httpStatus.CONFLICT,
+      );
+    }
+  }
+
   const slots = [];
 
   for (let i = 0; i < numberOfSlots; i++) {

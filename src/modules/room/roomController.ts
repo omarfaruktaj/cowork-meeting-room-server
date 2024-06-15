@@ -43,7 +43,7 @@ export const getARoomController: RequestHandler = async (req, res) => {
   const room = await getARoomService(id);
 
   if (!room) {
-    res
+    return res
       .status(httpStatus.NOT_FOUND)
       .json(
         new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", null),
@@ -60,7 +60,7 @@ export const getAllRoomController: RequestHandler = async (req, res) => {
   const rooms = await getAllRoomService();
 
   if (!rooms.length) {
-    res
+    return res
       .status(httpStatus.NOT_FOUND)
       .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
   }

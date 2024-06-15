@@ -56,6 +56,11 @@ export const getUserBookingsController = async (
 ) => {
   const bookings = await getUserBookingsService(String(req.user?._id));
 
+  if (!bookings.length)
+    return res
+      .status(httpStatus.NOT_FOUND)
+      .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+
   res
     .status(httpStatus.OK)
     .json(
