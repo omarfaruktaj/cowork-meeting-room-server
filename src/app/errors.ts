@@ -108,7 +108,7 @@ const handleDevelopmentError = (
 const handleProductionError = (err: AppError, _req: Request, res: Response) => {
   //? trusted error send error message
   if (err.isOperational) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       //? My preference
       /**
        * status: err.status,

@@ -15,11 +15,15 @@ export const createBookingController = async (req: Request, res: Response) => {
   const booking = await createBookingService({ ...req.body, userId });
 
   res
-    .status(httpStatus.CREATED)
+    .status(
+      // httpStatus.CREATED,
+      httpStatus.OK,
+    )
     .json(
       new APIResponse(
         true,
-        httpStatus.CREATED,
+        // httpStatus.CREATED,
+        httpStatus.OK,
         "Booking created successfully",
         booking,
       ),

@@ -13,11 +13,14 @@ export const createRoomController: RequestHandler = async (req, res) => {
   const room = await createRoomService(req.body);
 
   res
-    .status(httpStatus.CREATED)
+    .status(
+      // httpStatus.CREATED,
+      httpStatus.OK,
+    )
     .json(
       new APIResponse(
-        true,
-        httpStatus.CREATED,
+        true, // httpStatus.CREATED,
+        httpStatus.OK,
         "Room added successfully",
         room,
       ),

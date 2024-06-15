@@ -44,3 +44,5 @@ npm-debug.log*
 # yarn error logs
 yarn-debug.log*
 yarn-error.log*
+.vercel
+dist

@@ -9,11 +9,15 @@ export const signupController: RequestHandler = async (req, res) => {
   const user = await signupService(req.body);
 
   res
-    .status(httpStatus.CREATED)
+    .status(
+      //httpStatus.CREATED,
+      httpStatus.OK,
+    )
     .json(
       new APIResponse(
         true,
-        httpStatus.CREATED,
+        // httpStatus.CREATED,
+        httpStatus.OK,
         "User registered successfully",
         user,
       ),
