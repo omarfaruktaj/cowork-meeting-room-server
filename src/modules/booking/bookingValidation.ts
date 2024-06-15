@@ -14,7 +14,7 @@ const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
 export const bookingValidationSchema = z.object({
   room: objectIdSchema,
   slots: z.array(objectIdSchema),
-  user: objectIdSchema,
+  user: objectIdSchema.optional(),
   date: dateSchema,
   totalAmount: z
     .number()
