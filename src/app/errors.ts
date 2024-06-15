@@ -3,6 +3,7 @@ import AppError from "../utils/app-error";
 import envConfig from "../config/env";
 import httpStatus from "http-status";
 import { ZodError, ZodIssue } from "zod";
+import mongoose from "mongoose";
 
 //* handle zod error
 const handleZodError = (err: ZodError) => {
@@ -12,6 +13,23 @@ const handleZodError = (err: ZodError) => {
       message: issue.message,
     };
   });
+
+  return new AppError(
+    "Validation Error",
+    httpStatus.BAD_REQUEST,
+    errorMessages,
+  );
+};
+
+const handleValidationError = (err: mongoose.Error.ValidationError) => {
+  const errorMessages = Object.values(err.errors).map(
+    (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
+      return {
+        path: val?.path,
+        message: val?.message,
+      };
+    },
+  );
 
   return new AppError(
     "Validation Error",
@@ -80,6 +98,7 @@ const globalErrorHandler: ErrorRequestHandler = (
     err.statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
 
     if (error instanceof ZodError) err = handleZodError(error);
+    if (error?.name === "ValidationError") err = handleValidationError(error);
 
     handleProductionError(err, req, res);
   }
