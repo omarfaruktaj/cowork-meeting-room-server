@@ -59,3 +59,8 @@ export const createBookingService = async (data: TBooking) => {
 
   return newBooking;
 };
+export const getAllBookingsService = async () => {
+  const slots = await Booking.find({}).populate(["slots", "room", "user"]);
+
+  return slots;
+};

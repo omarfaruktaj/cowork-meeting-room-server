@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createBookingService } from "./bookingService";
+import { createBookingService, getAllBookingsService } from "./bookingService";
 import httpStatus from "http-status";
 import APIResponse from "../../utils/APIresponse";
 
@@ -16,6 +16,20 @@ export const createBookingController = async (req: Request, res: Response) => {
         httpStatus.CREATED,
         "Booking created successfully",
         booking,
+      ),
+    );
+};
+export const getAllBookingsController = async (req: Request, res: Response) => {
+  const bookings = await getAllBookingsService();
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(
+        true,
+        httpStatus.OK,
+        "All bookings retrieved successfully",
+        bookings,
       ),
     );
 };
