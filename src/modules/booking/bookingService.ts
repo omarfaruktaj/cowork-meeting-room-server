@@ -64,3 +64,11 @@ export const getAllBookingsService = async () => {
 
   return slots;
 };
+export const getUserBookingsService = async (userId: string) => {
+  const slots = await Booking.find({ user: userId }).populate([
+    "slots",
+    "room",
+  ]);
+
+  return slots;
+};
