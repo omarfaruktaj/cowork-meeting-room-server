@@ -37,7 +37,7 @@ app.all("*", (req: Request, res: Response) => {
 
   //* Assignment requirement
   res.status(httpStatus.NOT_FOUND).json({
-    success: true,
+    success: false,
     statusCode: 404,
     message: "Not Found",
   });

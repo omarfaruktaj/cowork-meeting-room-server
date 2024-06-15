@@ -29,12 +29,17 @@ const authorizeWithRoles =
     if (!user) return next(new AppError("No user found", httpStatus.NOT_FOUND));
 
     if (roles && !roles.includes(user.role))
-      return next(
-        new AppError(
-          "You do not have permission for this route",
-          httpStatus.UNAUTHORIZED,
-        ),
-      );
+      return res.status(httpStatus.UNAUTHORIZED).json({
+        success: false,
+        statusCode: httpStatus.UNAUTHORIZED,
+        message: "You have no access to this route",
+      });
+    // return next(
+    //   new AppError(
+    //     "You do not have permission for this route",
+    //     httpStatus.UNAUTHORIZED,
+    //   ),
+    // );
 
     req.user = user;
     next();

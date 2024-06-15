@@ -2,7 +2,7 @@ import { Server } from "http";
 import app from "./app/app";
 import connectDB from "./config/db";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 let server: Server;
 
 const port = 5000;
@@ -15,3 +15,17 @@ async function main() {
   });
 }
 main();
+
+process.on("unhandledRejection", () => {
+  console.log("unhandledRejection found, shutting down..");
+  if (server) {
+    server.close(() => {
+      process.exit(1);
+    });
+  }
+});
+
+process.on("uncaughtException", () => {
+  console.log(`uncaughtException found , shutting down ...`);
+  process.exit(1);
+});
