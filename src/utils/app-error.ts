@@ -1,10 +1,19 @@
+interface errorMessage {
+  path: string;
+  message: string;
+}
+
 class AppError extends Error {
   public readonly status: string;
   public readonly statusCode: number;
   public readonly isOperational: boolean;
-  public readonly errorMessages?: [];
+  public readonly errorMessages?: errorMessage[];
 
-  constructor(message: string, statusCode: number, errorMessages?: []) {
+  constructor(
+    message: string,
+    statusCode: number,
+    errorMessages?: errorMessage[],
+  ) {
     super(message);
 
     Object.setPrototypeOf(this, new.target.prototype);

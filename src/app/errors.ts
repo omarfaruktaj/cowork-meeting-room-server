@@ -2,6 +2,23 @@ import { ErrorRequestHandler, Request, Response } from "express";
 import AppError from "../utils/app-error";
 import envConfig from "../config/env";
 import httpStatus from "http-status";
+import { ZodError, ZodIssue } from "zod";
+
+//* handle zod error
+const handleZodError = (err: ZodError) => {
+  const errorMessages = err.issues.map((issue: ZodIssue) => {
+    return {
+      path: String(issue?.path[issue.path.length - 1]),
+      message: issue.message,
+    };
+  });
+
+  return new AppError(
+    "Validation Error",
+    httpStatus.BAD_REQUEST,
+    errorMessages,
+  );
+};
 
 //* handle development error
 const handleDevelopmentError = (
@@ -56,11 +73,13 @@ const globalErrorHandler: ErrorRequestHandler = (
   if (nodeEnv == "development") {
     handleDevelopmentError(error, req, res);
   } else if (nodeEnv == "production") {
-    const err = { ...error };
+    let err = { ...error };
 
     err.message = error.message;
     err.status = error.status || "error";
     err.statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+
+    if (error instanceof ZodError) err = handleZodError(error);
 
     handleProductionError(err, req, res);
   }
