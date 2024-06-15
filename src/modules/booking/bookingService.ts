@@ -59,11 +59,13 @@ export const createBookingService = async (data: TBooking) => {
 
   return newBooking;
 };
+
 export const getAllBookingsService = async () => {
   const bookings = await Booking.find({}).populate(["slots", "room", "user"]);
 
   return bookings;
 };
+
 export const getUserBookingsService = async (userId: string) => {
   const bookings = await Booking.find({ user: userId }).populate([
     "slots",
@@ -72,14 +74,28 @@ export const getUserBookingsService = async (userId: string) => {
 
   return bookings;
 };
+
 export const updateBookingService = async (
   id: string,
   data: TUpdateBooking,
 ) => {
-  const bookings = await Booking.findByIdAndUpdate(id, data, {
+  const booking = await Booking.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,
   });
 
-  return bookings;
+  return booking;
+};
+
+export const deleteBookingService = async (id: string) => {
+  const booking = await Booking.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  return booking;
 };

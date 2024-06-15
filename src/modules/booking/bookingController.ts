@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createBookingService,
+  deleteBookingService,
   getAllBookingsService,
   getUserBookingsService,
   updateBookingService,
@@ -24,6 +25,7 @@ export const createBookingController = async (req: Request, res: Response) => {
       ),
     );
 };
+
 export const getAllBookingsController = async (req: Request, res: Response) => {
   const bookings = await getAllBookingsService();
 
@@ -38,6 +40,7 @@ export const getAllBookingsController = async (req: Request, res: Response) => {
       ),
     );
 };
+
 export const getUserBookingsController = async (
   req: Request,
   res: Response,
@@ -55,6 +58,7 @@ export const getUserBookingsController = async (
       ),
     );
 };
+
 export const updateBookingController = async (req: Request, res: Response) => {
   const id = req.params.id;
 
@@ -67,6 +71,23 @@ export const updateBookingController = async (req: Request, res: Response) => {
         true,
         httpStatus.OK,
         "Booking updated successfully",
+        booking,
+      ),
+    );
+};
+
+export const deleteBookingController = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const booking = await deleteBookingService(id);
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(
+        true,
+        httpStatus.OK,
+        "Booking deleted successfully",
         booking,
       ),
     );
