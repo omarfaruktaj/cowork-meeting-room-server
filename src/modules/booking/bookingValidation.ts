@@ -28,4 +28,24 @@ export const bookingValidationSchema = z.object({
   isDeleted: z.boolean().optional(),
 });
 
+export const updateBookingValidationSchema = z.object({
+  room: objectIdSchema.optional(),
+  slots: z.array(objectIdSchema).optional(),
+  user: objectIdSchema.optional(),
+  date: dateSchema.optional(),
+  totalAmount: z
+    .number()
+    .min(0, { message: "Total amount must be a non-negative number" })
+    .optional(),
+  isConfirmed: z
+    .enum(["confirmed", "unconfirmed", "canceled"], {
+      message:
+        "Booking status must be one of 'confirmed', 'unconfirmed', or 'canceled'",
+    })
+    .default("unconfirmed")
+    .optional(),
+  isDeleted: z.boolean().optional(),
+});
+
 export type TBooking = z.infer<typeof bookingValidationSchema>;
+export type TUpdateBooking = z.infer<typeof updateBookingValidationSchema>;

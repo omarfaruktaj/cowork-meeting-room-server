@@ -3,6 +3,7 @@ import {
   createBookingService,
   getAllBookingsService,
   getUserBookingsService,
+  updateBookingService,
 } from "./bookingService";
 import httpStatus from "http-status";
 import APIResponse from "../../utils/APIresponse";
@@ -51,6 +52,22 @@ export const getUserBookingsController = async (
         httpStatus.OK,
         "User bookings retrieved successfully",
         bookings,
+      ),
+    );
+};
+export const updateBookingController = async (req: Request, res: Response) => {
+  const id = req.params.id;
+
+  const booking = await updateBookingService(id, req.body);
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(
+        true,
+        httpStatus.OK,
+        "Booking updated successfully",
+        booking,
       ),
     );
 };

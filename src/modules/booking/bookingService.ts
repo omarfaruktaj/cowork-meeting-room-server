@@ -1,7 +1,7 @@
 import httpStatus from "http-status";
 import AppError from "../../utils/app-error";
 import { getARoomService } from "../room/roomService";
-import { TBooking } from "./bookingValidation";
+import { TBooking, TUpdateBooking } from "./bookingValidation";
 import Slot from "../slot/slotModel";
 import Booking from "./bookingModel";
 import { getUserById } from "../user/userService";
@@ -60,15 +60,26 @@ export const createBookingService = async (data: TBooking) => {
   return newBooking;
 };
 export const getAllBookingsService = async () => {
-  const slots = await Booking.find({}).populate(["slots", "room", "user"]);
+  const bookings = await Booking.find({}).populate(["slots", "room", "user"]);
 
-  return slots;
+  return bookings;
 };
 export const getUserBookingsService = async (userId: string) => {
-  const slots = await Booking.find({ user: userId }).populate([
+  const bookings = await Booking.find({ user: userId }).populate([
     "slots",
     "room",
   ]);
 
-  return slots;
+  return bookings;
+};
+export const updateBookingService = async (
+  id: string,
+  data: TUpdateBooking,
+) => {
+  const bookings = await Booking.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
+
+  return bookings;
 };
