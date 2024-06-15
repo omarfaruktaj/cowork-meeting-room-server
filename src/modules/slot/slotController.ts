@@ -2,7 +2,6 @@ import { RequestHandler } from "express";
 import { GetAvailableSlotService, createSlotService } from "./slotService";
 import httpStatus from "http-status";
 import APIResponse from "../../utils/APIresponse";
-import AppError from "../../utils/app-error";
 import { validateSlotQueryParams } from "./slotValidation";
 
 export const createSlotController: RequestHandler = async (req, res) => {
@@ -31,7 +30,10 @@ export const GetAvailableSlotController: RequestHandler = async (
   const slots = await GetAvailableSlotService(result.data);
 
   if (!slots.length)
-    return next(new AppError("No slot found", httpStatus.NOT_FOUND));
+    return res
+      .status(httpStatus.NOT_FOUND)
+      .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+
   res
     .status(httpStatus.OK)
     .json(

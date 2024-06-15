@@ -42,7 +42,9 @@ export const getARoomController: RequestHandler = async (req, res) => {
   if (!room) {
     res
       .status(httpStatus.NOT_FOUND)
-      .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+      .json(
+        new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", null),
+      );
   }
 
   res

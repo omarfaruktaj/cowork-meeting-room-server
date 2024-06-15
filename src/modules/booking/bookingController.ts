@@ -29,6 +29,11 @@ export const createBookingController = async (req: Request, res: Response) => {
 export const getAllBookingsController = async (req: Request, res: Response) => {
   const bookings = await getAllBookingsService();
 
+  if (!bookings.length)
+    return res
+      .status(httpStatus.NOT_FOUND)
+      .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+
   res
     .status(httpStatus.OK)
     .json(
