@@ -21,6 +21,7 @@ const handleZodError = (err: ZodError) => {
   );
 };
 
+//* Handle validation error
 const handleValidationError = (err: mongoose.Error.ValidationError) => {
   const errorMessages = Object.values(err.errors).map(
     (val: mongoose.Error.ValidatorError | mongoose.Error.CastError) => {
@@ -30,6 +31,43 @@ const handleValidationError = (err: mongoose.Error.ValidationError) => {
       };
     },
   );
+
+  return new AppError(
+    "Validation Error",
+    httpStatus.BAD_REQUEST,
+    errorMessages,
+  );
+};
+
+//* handle cast error
+const handleCastErrorError = (err: mongoose.Error.CastError) => {
+  const errorMessages = [
+    {
+      path: err.path,
+      message: err.message,
+    },
+  ];
+
+  return new AppError(
+    "Validation Error",
+    httpStatus.BAD_REQUEST,
+    errorMessages,
+  );
+};
+
+//* handle duplicate error
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const handleDuplicateError = (err: any) => {
+  const match = err.message.match(/"([^"]*)"/);
+
+  const value = match && match[1];
+
+  const errorMessages = [
+    {
+      path: "",
+      message: `${value} is already exists`,
+    },
+  ];
 
   return new AppError(
     "Validation Error",
@@ -99,6 +137,8 @@ const globalErrorHandler: ErrorRequestHandler = (
 
     if (error instanceof ZodError) err = handleZodError(error);
     if (error?.name === "ValidationError") err = handleValidationError(error);
+    if (error?.name === "CastError") err = handleCastErrorError(error);
+    if (error?.code === "11000") err = handleDuplicateError(error);
 
     handleProductionError(err, req, res);
   }
