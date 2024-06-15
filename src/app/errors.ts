@@ -76,6 +76,20 @@ const handleDuplicateError = (err: any) => {
   );
 };
 
+const handleJWTError = () => {
+  return new AppError(
+    "Invalid token. Please log in again!",
+    httpStatus.UNAUTHORIZED,
+  );
+};
+
+const handleJWTExpiredError = () => {
+  return new AppError(
+    "Your token has expired! Please log in again.",
+    httpStatus.UNAUTHORIZED,
+  );
+};
+
 //* handle development error
 const handleDevelopmentError = (
   err: AppError,
@@ -139,6 +153,8 @@ const globalErrorHandler: ErrorRequestHandler = (
     if (error?.name === "ValidationError") err = handleValidationError(error);
     if (error?.name === "CastError") err = handleCastErrorError(error);
     if (error?.code === "11000") err = handleDuplicateError(error);
+    if (error?.name === "JsonWebTokenError") err = handleJWTError();
+    if (error?.name === "TokenExpiredError") err = handleJWTExpiredError();
 
     handleProductionError(err, req, res);
   }
