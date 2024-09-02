@@ -24,6 +24,7 @@ export const slotValidationSchema = z.object({
   startTime: timeSchema,
   endTime: timeSchema,
   isBooked: z.boolean().default(false),
+  isDeleted: z.boolean().default(false),
 });
 
 export const validateSlotTimes = (startTime: string, endTime: string) => {

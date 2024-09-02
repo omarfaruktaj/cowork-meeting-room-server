@@ -3,6 +3,7 @@ import AppError from "../../utils/app-error";
 import Room from "./roomModel";
 import { TRoom, TUpdateRoom } from "./roomValidation";
 import ApiFeatures from "../../builder/api-feature";
+import Slot from "../slot/slotModel";
 
 export const createRoomService = async (data: TRoom) => {
   const existedRoom = await Room.findOne({ roomNo: data.roomNo });
@@ -99,6 +100,7 @@ export const deleteRoomService = async (roomId: string) => {
     { isDeleted: true },
     { new: true },
   );
+  await Slot.updateMany({ room: roomId }, { $set: { isDeleted: true } });
 
   return deletedRoom;
 };
