@@ -1,11 +1,11 @@
 import { Server } from "http";
 import app from "./app/app";
 import connectDB from "./config/db";
+import envConfig from "./config/env";
 
- 
 let server: Server;
 
-const port = 5000;
+const port = envConfig.get("PORT") || 5000;
 
 async function main() {
   await connectDB();

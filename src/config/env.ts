@@ -4,14 +4,16 @@ interface EnvConfig {
   NODE_ENV: string | undefined;
   ACCESS_TOKEN_SECRET: string | undefined;
   ACCESS_TOKEN_EXPIRE_IN: string | undefined;
+  STRIPE_SECRET_KEY: string | undefined;
 }
 
 const _envConfig: EnvConfig = {
-  PORT: process.env.PORT || "5090",
+  PORT: process.env.PORT || "5080",
   NODE_ENV: process.env.NODE_ENV || "development",
   MONGO_URI: process.env.MONGO_URI,
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRE_IN: process.env.ACCESS_TOKEN_EXPIRE_IN,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
 };
 
 const envConfig = {

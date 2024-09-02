@@ -1,5 +1,11 @@
 import { RequestHandler } from "express";
-import { GetAvailableSlotService, createSlotService } from "./slotService";
+import {
+  GetAvailableSlotService,
+  GetSlotsService,
+  createSlotService,
+  deleteSlotService,
+  updateSlotService,
+} from "./slotService";
 import httpStatus from "http-status";
 import APIResponse from "../../utils/APIresponse";
 import { validateSlotQueryParams } from "./slotValidation";
@@ -18,6 +24,31 @@ export const createSlotController: RequestHandler = async (req, res) => {
     );
 };
 
+export const updateSlotController: RequestHandler = async (req, res) => {
+  const slotId = req.params.slotId;
+  const slot = await updateSlotService(slotId, req.body);
+  res
+    .status(httpStatus.CREATED)
+    .json(
+      new APIResponse(
+        true,
+        httpStatus.CREATED,
+        "Slots updated successfully",
+        slot,
+      ),
+    );
+};
+
+export const deleteSlotController: RequestHandler = async (req, res) => {
+  const slotId = req.params.slotId;
+  const slot = await deleteSlotService(slotId);
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(true, httpStatus.OK, "Slots delete successfully", slot),
+    );
+};
+
 export const GetAvailableSlotController: RequestHandler = async (
   req,
   res,
@@ -33,6 +64,20 @@ export const GetAvailableSlotController: RequestHandler = async (
     return res
       .status(httpStatus.NOT_FOUND)
       .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+
+  res
+    .status(httpStatus.OK)
+    .json(
+      new APIResponse(
+        true,
+        httpStatus.OK,
+        "Available slots retrieved successfully",
+        slots,
+      ),
+    );
+};
+export const GetSlotsController: RequestHandler = async (req, res) => {
+  const slots = await GetSlotsService();
 
   res
     .status(httpStatus.OK)

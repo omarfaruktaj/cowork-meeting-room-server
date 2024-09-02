@@ -1,0 +1,4 @@
+POST  https://coworking-space-six.vercel.app/api/rooms
+
+
+

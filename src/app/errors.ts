@@ -58,13 +58,13 @@ const handleCastErrorError = (err: mongoose.Error.CastError) => {
 //* handle duplicate error
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const handleDuplicateError = (err: any) => {
-  const match = err.message.match(/"([^"]*)"/);
+  const keyValue = err.keyValue;
+  const keyPath = Object.keys(keyValue)[0];
 
-  const value = match && match[1];
-
+  const value = keyValue[keyPath];
   const errorMessages = [
     {
-      path: "",
+      path: keyPath,
       message: `${value} is already exists`,
     },
   ];
@@ -152,7 +152,7 @@ const globalErrorHandler: ErrorRequestHandler = (
     if (error instanceof ZodError) err = handleZodError(error);
     if (error?.name === "ValidationError") err = handleValidationError(error);
     if (error?.name === "CastError") err = handleCastErrorError(error);
-    if (error?.code === "11000") err = handleDuplicateError(error);
+    if (error?.code === 11000) err = handleDuplicateError(error);
     if (error?.name === "JsonWebTokenError") err = handleJWTError();
     if (error?.name === "TokenExpiredError") err = handleJWTExpiredError();
 

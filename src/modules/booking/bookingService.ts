@@ -81,7 +81,6 @@ export const updateBookingService = async (
 
   if (!isBookingExist)
     throw new AppError("No booking found", httpStatus.NOT_FOUND);
-
   const booking = await Booking.findByIdAndUpdate(id, data, {
     new: true,
     runValidators: true,

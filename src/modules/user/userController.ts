@@ -1,5 +1,5 @@
-import { RequestHandler } from "express";
-import { loginService, signupService } from "./userService";
+import { RequestHandler, Request, Response } from "express";
+import { getUserById, loginService, signupService } from "./userService";
 import APIResponse from "../../utils/APIresponse";
 import httpStatus from "http-status";
 import generateJWT from "../../utils/generateJWT";
@@ -38,6 +38,17 @@ export const loginController: RequestHandler = async (req, res) => {
     statusCode: 200,
     message: "User logged in successfully",
     token: token,
+    data: user,
+  });
+};
+
+export const getMe = async (req: Request, res: Response) => {
+  const user = await getUserById(String(req?.user?._id));
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    statusCode: 200,
+    message: "User get successfully",
     data: user,
   });
 };

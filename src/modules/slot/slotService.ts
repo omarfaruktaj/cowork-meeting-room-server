@@ -15,6 +15,7 @@ function getTimeFromMinutes(totalMinutes: number) {
   const minutes = totalMinutes % 60;
   return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`;
 }
+
 export const createSlotService = async (data: TSlot) => {
   const roomId = data.room.toString();
 
@@ -70,6 +71,70 @@ export const createSlotService = async (data: TSlot) => {
   return newSlots;
 };
 
+export const updateSlotService = async (id: string, data: TSlot) => {
+  const roomId = data.room.toString();
+
+  // Fetch the room and validate it
+  const room = await getARoomService(roomId);
+  if (!room || room.isDeleted) {
+    throw new AppError("No room found.", httpStatus.NOT_FOUND);
+  }
+
+  // Fetch the slot to update and validate it
+  const slot = await Slot.findById(id);
+  if (!slot) {
+    throw new AppError("No slot found.", httpStatus.NOT_FOUND);
+  }
+
+  // Extract new slot times
+  const startTimeInMinute = getTimeInMinutes(data.startTime);
+  const endTimeInMinute = getTimeInMinutes(data.endTime);
+
+  // Fetch all existing slots for the same room and date
+  const existingSlots = await Slot.find({
+    room: data.room,
+    date: data.date,
+  });
+
+  // Check for overlaps with existing slots (excluding the slot being updated itself)
+  for (const existingSlot of existingSlots) {
+    if (existingSlot._id.toString() === id) continue; // Skip the slot being updated
+
+    const existingStartTimeInMinute = getTimeInMinutes(existingSlot.startTime);
+    const existingEndTimeInMinute = getTimeInMinutes(existingSlot.endTime);
+
+    // Check if there is an overlap
+    const isOverlap = !(
+      existingEndTimeInMinute <= startTimeInMinute ||
+      existingStartTimeInMinute >= endTimeInMinute
+    );
+
+    if (isOverlap) {
+      throw new AppError(
+        "Slot already exists in the given time range.",
+        httpStatus.CONFLICT,
+      );
+    }
+  }
+
+  const updatedSlot = await Slot.findByIdAndUpdate(id, data, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedSlot;
+};
+
+export const deleteSlotService = async (id: string) => {
+  const slot = await Slot.findById(id);
+
+  if (!slot) throw new AppError("No slot found.", httpStatus.NOT_FOUND);
+
+  const deletedSlot = await Slot.findByIdAndDelete(id);
+
+  return deletedSlot;
+};
+
 interface QueryInterface {
   isBooked: boolean;
   date?: string;
@@ -89,5 +154,9 @@ export const GetAvailableSlotService = async (params: TSlotQueryParams) => {
   }
 
   const slots = await Slot.find(query).populate("room");
+  return slots;
+};
+export const GetSlotsService = async () => {
+  const slots = await Slot.find().populate("room");
   return slots;
 };

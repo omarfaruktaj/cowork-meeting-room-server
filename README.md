@@ -30,7 +30,7 @@ The application is currently deployed at [Live ](https://coworking-space-six.ver
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
+   git clone https://github.com/omarfaruktaj/cowork-meeting-room-server.git
    cd your-repo
    ```
 

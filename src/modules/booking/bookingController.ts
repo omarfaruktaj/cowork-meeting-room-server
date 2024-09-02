@@ -11,7 +11,6 @@ import APIResponse from "../../utils/APIresponse";
 
 export const createBookingController = async (req: Request, res: Response) => {
   const userId = req.body.user ? req.body.user : req?.user?._id;
-
   const booking = await createBookingService({ ...req.body, userId });
 
   res

@@ -57,13 +57,13 @@ export const getARoomController: RequestHandler = async (req, res) => {
     );
 };
 export const getAllRoomController: RequestHandler = async (req, res) => {
-  const rooms = await getAllRoomService();
+  const roomData = await getAllRoomService(req.query);
 
-  if (!rooms.length) {
-    return res
-      .status(httpStatus.NOT_FOUND)
-      .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
-  }
+  // if (!rooms.length) {
+  //   return res
+  //     .status(httpStatus.NOT_FOUND)
+  //     .json(new APIResponse(false, httpStatus.NOT_FOUND, "No Data Found", []));
+  // }
 
   res
     .status(httpStatus.OK)
@@ -72,7 +72,8 @@ export const getAllRoomController: RequestHandler = async (req, res) => {
         true,
         httpStatus.OK,
         "Rooms retrieved successfully",
-        rooms,
+        roomData.rooms,
+        roomData.pagination,
       ),
     );
 };
